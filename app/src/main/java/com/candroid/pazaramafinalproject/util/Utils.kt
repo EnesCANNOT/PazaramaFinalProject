@@ -1,16 +1,19 @@
 package com.candroid.pazaramafinalproject.util
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.RadioGroup
-import androidx.core.content.ContextCompat
-import com.candroid.pazaramafinalproject.HomeFragmentViewModel
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.candroid.pazaramafinalproject.presentation.viewmodel.HomeFragmentViewModel
 import com.candroid.pazaramafinalproject.R
+import kotlinx.coroutines.NonCancellable.start
 
 fun showCustomPopup(context: Context, view: View, homeFragmentViewModel: HomeFragmentViewModel){
     val popupView = LayoutInflater.from(context).inflate(R.layout.popup_menu, null)
@@ -60,3 +63,21 @@ enum class SortOptionDrawable(val optionDrawable: Int) {
     NUMBER(R.drawable.ic_sort_tag),
     NAME(R.drawable.ic_sort_name)
 }
+
+fun ImageView.downloadUrl(url: String?, progressDrawable: CircularProgressDrawable){
+    val options = RequestOptions()
+        .placeholder(progressDrawable)
+        .error(R.drawable.ic_error_outline)
+
+    Glide.with(context)
+        .setDefaultRequestOptions(options)
+        .load(url)
+        .into(this)
+}
+
+fun placeHolderProgressBar(context: Context): CircularProgressDrawable = CircularProgressDrawable(context)
+    .apply {
+        strokeWidth = 8f
+        centerRadius = 40f
+        start()
+    }

@@ -1,4 +1,4 @@
-package com.candroid.pazaramafinalproject
+package com.candroid.pazaramafinalproject.presentation.view.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

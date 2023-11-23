@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
-    tools:context=".HomeFragment">
+    tools:context=".presentation.view.ui.HomeFragment">
 
     <ImageView
         android:id="@+id/pokeballIV"
@@ -42,7 +42,9 @@
         android:background="@drawable/round_search_view"
         app:searchIcon="@drawable/ic_search"
         app:searchHintIcon="@drawable/ic_search"
-        android:hint="Search"
+        app:closeIcon="@drawable/ic_cancel"
+        app:queryHint="Eg: Charmander"
+        app:iconifiedByDefault="false"
         app:layout_constraintEnd_toStartOf="@+id/sortButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -59,6 +61,7 @@
         app:layout_constraintTop_toTopOf="@+id/searchView" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/pokemonRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
