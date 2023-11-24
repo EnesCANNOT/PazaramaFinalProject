@@ -1,5 +1,6 @@
 package com.candroid.pazaramafinalproject.presentation.view.ui
 
+import PokemonAdapter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,12 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.candroid.pazaramafinalproject.presentation.viewmodel.HomeFragmentViewModel
 import com.candroid.pazaramafinalproject.databinding.FragmentHomeBinding
 import com.candroid.pazaramafinalproject.databinding.PopupMenuBinding
-import com.candroid.pazaramafinalproject.presentation.view.adapter.PokemonAdapter
 import com.candroid.pazaramafinalproject.util.showCustomPopup
 
 class HomeFragment : Fragment() {
@@ -28,13 +29,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadPokemon()
+        viewModel.getPokemons()
         initView()
         initListener()
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    viewModel.searchQuery.value = it
+                if (!query.isNullOrEmpty()){
+                    //viewModel.getPokemonByName(query)
+                    viewModel.setSearchQuery(query)
+                } else{
+                    viewModel.getPokemons()
                 }
                 return true
             }
@@ -42,11 +46,11 @@ class HomeFragment : Fragment() {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText.isNullOrEmpty()){
                     binding.searchView.queryHint = "Eg: Charmander"
+                    viewModel.getPokemons()
                 } else {
-                    newText.let {
-                        viewModel.searchQuery.value = it
-                    }
                     binding.searchView.queryHint = null
+                    //viewModel.getPokemonByName(newText)
+                    viewModel.setSearchQuery(newText)
                 }
 
                 return true
@@ -57,12 +61,60 @@ class HomeFragment : Fragment() {
         binding.sortButton.setOnClickListener {
             showCustomPopup(requireContext(), it, viewModel)
         }
+
+        viewModel.sortOption.observe(viewLifecycleOwner, Observer {
+            when (it.option){
+                "Number" -> {
+                    pokemonAdapter.updatePokedexList(viewModel.pokemonList.value!!.sortedBy { it.number })
+                }
+                "Name" -> {
+                    pokemonAdapter.updatePokedexList(viewModel.pokemonList.value!!.sortedBy { it.pokemonName })
+                }
+            }
+        })
     }
 
     private fun initView() {
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         binding.pokemonRecyclerView.layoutManager = layoutManager
         binding.pokemonRecyclerView.adapter = pokemonAdapter
+
+//        binding.pokemonRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//                val totalItemCount = layoutManager.itemCount
+//                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPositions(null).maxOrNull()
+//                viewModel.searchQuery.observe(viewLifecycleOwner, Observer{
+//                    if (it.isNullOrEmpty()){
+//                        if (lastVisibleItemPosition != null && lastVisibleItemPosition == totalItemCount - 1) {
+//                            // Load more Pokémon when the user reaches the end of the list
+//                            viewModel.getPokemons()
+//                        }
+//                    }
+//                })
+//            }
+//        })
+
+        binding.pokemonRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPositions(null).maxOrNull()
+                if (lastVisibleItemPosition != null && lastVisibleItemPosition == totalItemCount - 1) {
+                    // Load more Pokémon when the user reaches the end of the list
+                    if (viewModel.searchQuery.value.isNullOrEmpty()) {
+                        // Load more Pokémon when the user reaches the end of the list
+                        viewModel.getPokemons()
+                    } else {
+                        // For search queries, load more Pokémon based on the search query
+                        viewModel.searchQuery.value?.let { searchQuery ->
+                            viewModel.getPokemonByName(searchQuery)
+                        }
+                    }
+                }
+            }
+        })
+
     }
 
     private fun initListener() {

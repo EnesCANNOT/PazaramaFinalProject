@@ -18,18 +18,15 @@ class PokemonRepository{
         } catch (e: Exception) {
             Resource.Error(message = e.message.toString(), data = null)
         }
-
-
     }
 
     suspend fun getPokemonByName(name: String): Resource<Pokemon> {
         return try {
             val response = pokemonApi.getPokemonByName(name)
-            Log.i("HebeleRepo", "$name")
-            Log.i("HebeleRepo", "$response")
             Resource.Success(data = response)
         } catch (e: Exception) {
             Resource.Error(message = e.message.toString(), data = null)
         }
     }
+
 }

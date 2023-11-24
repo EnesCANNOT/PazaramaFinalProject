@@ -1,6 +1,7 @@
 package com.candroid.pazaramafinalproject.presentation.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,8 +12,6 @@ import com.candroid.pazaramafinalproject.util.Constants.PAGE_SIZE
 import com.candroid.pazaramafinalproject.util.Resource
 import com.candroid.pazaramafinalproject.util.SortOption
 import com.candroid.pazaramafinalproject.util.SortOptionDrawable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -23,67 +22,100 @@ class HomeFragmentViewModel : ViewModel() {
 
     val sortOption = MutableLiveData<SortOption>(SortOption.NUMBER)
     val sortOptionDrawable = MutableLiveData<SortOptionDrawable>(SortOptionDrawable.NUMBER)
-    val searchQuery = MutableLiveData<String>("")
+
+    private val _searchQuery = MutableLiveData<String>("")
+    val searchQuery: LiveData<String> = _searchQuery
+
+    private val _isLoading = MutableLiveData<Boolean>(false)
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> = _error
+
 
     val pokemonList = MutableLiveData<List<PokedexListEntry>>(listOf())
+    //private val cachedList = mutableListOf<PokedexListEntry>()
 
-    fun loadPokemon(){
+    fun getPokemons(){
         viewModelScope.launch {
+            if (_isLoading.value == true) return@launch
+            _isLoading.value = true
+
+//            if (_searchQuery.value.isNullOrBlank()) {
+//                pokemonList.value = emptyList()
+//            }
+
             val result = repository.getPokemonList(PAGE_SIZE, currentPage * PAGE_SIZE)
             when(result) {
                 is Resource.Success -> {
-                    val pokedexEntries = result.data?.results!!.mapIndexed { index, entry ->
+                    _isLoading.value = false
+                    val pokedexEntries = result.data?.results?.mapIndexed { index, entry ->
                         val number = if (entry.url.endsWith("/")){
                             entry.url.dropLast(1).takeLastWhile { it.isDigit() }
                         } else {
                             entry.url.takeLastWhile { it.isDigit() }
                         }
-                        val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
-                        PokedexListEntry(entry.name.capitalize(Locale.ROOT), url, number.toInt())
+                        val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${number}.png"
+                        PokedexListEntry(entry.name.capitalize(Locale.ROOT), imageUrl, number.toInt())
                     }
                     pokemonList.value = pokemonList.value?.plus(pokedexEntries ?: listOf())
-                    pokemonList.value?.forEach {
-                        Log.i("Hebele", "${it.number}")
-                        Log.i("Hebele", "${it.pokemonName}")
-                        Log.i("Hebele", "${it.imageUrl}")
-                        getPokemonByName(it.pokemonName.toLowerCase())
-                    }
                     currentPage++
                 }
 
                 is Resource.Error -> {
-                    Log.i("Hebele", "Error scope")
+                    _error.value = result.message.toString()
+                    _isLoading.value = false
                 }
 
-                else -> {
-                    Log.i("Hebele", "Else scope")
+                is Resource.Loading -> {
+                    _isLoading.value = true
                 }
             }
         }
     }
 
     fun getPokemonByName(name: String) {
+        _searchQuery.value = name
         viewModelScope.launch {
             val result = repository.getPokemonByName(name)
-            Log.i("HebeleViewModel", result.message.toString())
             when(result){
                 is Resource.Success -> {
-                    val x = result.data
-                    displayPokemonInfos(x!!)
+                    val pokemon = result.data
+                    pokemon?.let {
+                        val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${it.id}.png"
+                        pokemonList.value = listOf(PokedexListEntry(it.name, imageUrl, it.id))
+                        displayPokemonInfos(it)
+                    }
                 }
 
                 is Resource.Error -> {
-                    Log.i("Hebele Info", "Error scope : ${result}")
+                    _error.value = result.message.toString()
+                    _isLoading.value = false
                 }
 
-                else -> {
-                    Log.i("Hebele Info", "Else scope")
+                is Resource.Loading -> {
+                    _isLoading.value = true
                 }
             }
         }
     }
 
-    fun displayPokemonInfos(pokemon: Pokemon){
+//    fun filterPokemonList(query: String): List<PokedexListEntry>{
+//        if(!query.isNullOrBlank()){
+//            return
+//        }
+//    }
+
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
+        currentPage = 0 // Reset currentPage when a new search is initiated
+        viewModelScope.launch {
+            pokemonList.value = emptyList() // Clear the existing list when a new search is initiated
+            getPokemonByName(query)
+        }
+    }
+
+    private fun displayPokemonInfos(pokemon: Pokemon){
         Log.i("Hebele Info", "Pokemon ID : ${pokemon.id}")
         pokemon.types.forEach {
             Log.i("Hebele Info", "Pokemon Types : ${it.type.name}")
