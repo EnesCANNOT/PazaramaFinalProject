@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-//    kotlin("kapt")
-//    id("com.google.dagger.hilt.android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -43,7 +43,7 @@ android {
 
 dependencies {
 
-//    val hiltVersion = "2.48"
+    val hiltVersion = "2.48"
     val retrofitVersion = "2.9.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -56,9 +56,9 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-//    //Dependency Injection
-//    implementation("com.google.dagger:hilt-android:$hiltVersion")
-//    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    //Dependency Injection
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 
     //Retrofit
     implementation ("com.squareup.retrofit2:retrofit:$retrofitVersion")

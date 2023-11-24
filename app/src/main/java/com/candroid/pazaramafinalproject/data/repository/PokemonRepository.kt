@@ -6,10 +6,10 @@ import com.candroid.pazaramafinalproject.data.remote.responses.PokemonList
 import com.candroid.pazaramafinalproject.data.remote.service.PokemonApi
 import com.candroid.pazaramafinalproject.data.remote.service.RetrofitInstance
 import com.candroid.pazaramafinalproject.util.Resource
+import javax.inject.Inject
 
-class PokemonRepository{
+class PokemonRepository @Inject constructor(val pokemonApi: PokemonApi){
 
-    private val pokemonApi = RetrofitInstance.pokemonApi
 
     suspend fun getPokemonList(limit: Int, offset: Int): Resource<PokemonList> {
         return try {
