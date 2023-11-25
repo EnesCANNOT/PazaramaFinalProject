@@ -61,6 +61,7 @@ class HomeFragmentViewModel @Inject constructor(val pokemonRepository: PokemonRe
                         PokedexListEntry(entry.name.capitalize(Locale.ROOT), imageUrl, number.toInt())
                     }
                     _pokemonList.value = _pokemonList.value?.plus(pokedexEntries ?: listOf())
+                    sortList()
                     currentPage++
                 }
 
@@ -146,15 +147,15 @@ class HomeFragmentViewModel @Inject constructor(val pokemonRepository: PokemonRe
         _searchQuery.value = searchQuery
     }
 
-//
-//    fun sortList(option: SortOption){
-//        when (sortOption.value!!.option){
-//            "Number" -> {
-//                _pokemonList.value?.sortedBy { it.number }
-//            }
-//            "Name" -> {
-//                _pokemonList.value?.sortedBy { it.pokemonName }
-//            }
-//        }
-//    }
+
+    fun sortList(){
+        when (sortOption.value!!.option){
+            "Number" -> {
+                _pokemonList.value = _pokemonList.value?.sortedBy { it.number }
+            }
+            "Name" -> {
+                _pokemonList.value = _pokemonList.value?.sortedBy { it.pokemonName }
+            }
+        }
+    }
 }

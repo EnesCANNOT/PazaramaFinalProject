@@ -161,6 +161,8 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        viewModel.sortList()
+
         viewModel.setSearchQueryText("")
         binding.searchView.setQuery("", true)
 
