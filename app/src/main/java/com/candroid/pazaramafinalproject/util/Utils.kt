@@ -1,5 +1,7 @@
 package com.candroid.pazaramafinalproject.util
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -81,3 +83,16 @@ fun placeHolderProgressBar(context: Context): CircularProgressDrawable = Circula
         centerRadius = 40f
         start()
     }
+
+class UtilsActivity{
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        private var currentActivity: Activity? = null
+        fun setCurrentActivity(activity: Activity?) {
+            currentActivity = activity
+        }
+        fun getCurrentActivity(): Activity? {
+            return currentActivity
+        }
+    }
+}

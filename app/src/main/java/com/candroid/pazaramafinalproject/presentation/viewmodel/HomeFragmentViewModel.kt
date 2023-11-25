@@ -76,7 +76,17 @@ class HomeFragmentViewModel @Inject constructor(val pokemonRepository: PokemonRe
         }
     }
 
-    fun getPokemonByName(name: String){
+    fun getPokemon(query: String?){
+        if (query != null) {
+            if (query.startsWith("#")){
+                getPokemonById(query.drop(1).toIntOrNull())
+            } else{
+                getPokemonByName(query)
+            }
+        }
+    }
+
+    private fun getPokemonByName(name: String){
         _searchQuery.value = name
         viewModelScope.launch {
             val result = pokemonRepository.getPokemonByName(name)
@@ -96,6 +106,33 @@ class HomeFragmentViewModel @Inject constructor(val pokemonRepository: PokemonRe
 
                 is Resource.Loading -> {
                     _isLoading.value = true
+                }
+            }
+        }
+    }
+
+    private fun getPokemonById(id: Int?){
+        id?.let {
+            _searchQuery.value = id.toString()
+            viewModelScope.launch {
+                val result = pokemonRepository.getPokemonById(id)
+                when(result) {
+                    is Resource.Success -> {
+                        val pokemon = result.data
+                        pokemon?.let {
+                            val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${it.id}.png"
+                            _filteredList.value = listOf(PokedexListEntry(it.name, imageUrl, it.id))
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        _error.value = result.message.toString()
+                        _isLoading.value = false
+                    }
+
+                    is Resource.Loading -> {
+                        _isLoading.value = true
+                    }
                 }
             }
         }

@@ -46,7 +46,7 @@
         app:layout_constraintEnd_toStartOf="@+id/sortButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:queryHint="Eg: Charmander or #0004"
+        app:queryHint="Eg: Pikachu or #00025"
         app:searchHintIcon="@drawable/ic_search"
         app:searchIcon="@drawable/ic_search" />
 

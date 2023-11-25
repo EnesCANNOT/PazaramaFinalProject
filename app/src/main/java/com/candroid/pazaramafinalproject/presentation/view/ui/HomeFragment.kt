@@ -7,16 +7,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.candroid.pazaramafinalproject.R
 import com.candroid.pazaramafinalproject.presentation.viewmodel.HomeFragmentViewModel
 import com.candroid.pazaramafinalproject.databinding.FragmentHomeBinding
 import com.candroid.pazaramafinalproject.databinding.PopupMenuBinding
+import com.candroid.pazaramafinalproject.util.UtilsActivity
 import com.candroid.pazaramafinalproject.util.showCustomPopup
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -45,7 +54,7 @@ class HomeFragment : Fragment() {
                     viewModel.fetchPokemonList()
                     pokemonAdapter.updatePokedexList(viewModel.pokemonList.value!!)
                 } else{
-                    viewModel.getPokemonByName(query)
+                    viewModel.getPokemon(query)
                     viewModel.filteredList.value?.let { pokemonAdapter.updatePokedexList(it) }
                 }
                 return true
@@ -53,18 +62,22 @@ class HomeFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText.isNullOrEmpty()){
-                    binding.searchView.queryHint = "Eg: Charmander or #0004"
+                    binding.searchView.queryHint = "Eg: Pikachu or #00025"
                     viewModel.apply { setFilteredList().also { setSearchQueryText("") } }
                     viewModel.fetchPokemonList()
                     pokemonAdapter.updatePokedexList(viewModel.pokemonList.value!!)
+                    return true
                 } else {
                     binding.searchView.queryHint = null
-                    viewModel.setSearchQueryText(newText)
-                    viewModel.filteredList.value?.let { pokemonAdapter.updatePokedexList(it) }
-                    viewModel.getPokemonByName(newText)
+                    viewModel.getPokemon(newText)
+                    if(viewModel.filteredList.value != null){
+                        pokemonAdapter.updatePokedexList(viewModel.filteredList.value!!)
+                    }  else{
+                        pokemonAdapter.updatePokedexList(viewModel.pokemonList.value!!)
+                    }
+                    //viewModel.filteredList.value?.let { pokemonAdapter.updatePokedexList(it) }
+                    return true
                 }
-
-                return true
             }
         })
 
@@ -105,7 +118,7 @@ class HomeFragment : Fragment() {
                     }
                     else {
                         viewModel.searchQuery.value?.let { searchQuery ->
-                            viewModel.getPokemonByName(searchQuery)
+                            viewModel.getPokemon(searchQuery)
                             viewModel.filteredList.value?.let {
                                 pokemonAdapter.updatePokedexList(it)
                                 Log.i("Hebele", "search query changed")
@@ -143,6 +156,22 @@ class HomeFragment : Fragment() {
             }
         }
     */
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.setSearchQueryText("")
+        binding.searchView.setQuery("", true)
+
+        val activity = UtilsActivity.getCurrentActivity()
+        activity?.let {
+            val window: Window = activity.window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.statusBarColor = ContextCompat.getColor(activity, R.color.primary)
+            window.navigationBarColor = ContextCompat.getColor(activity, R.color.primary)
+        }
     }
 
 }

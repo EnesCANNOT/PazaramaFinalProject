@@ -1,16 +1,20 @@
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.candroid.pazaramafinalproject.R
 import com.candroid.pazaramafinalproject.data.models.PokedexListEntry
 import com.candroid.pazaramafinalproject.databinding.PokemonItemBinding
+import com.candroid.pazaramafinalproject.presentation.view.ui.HomeFragmentDirections
 import com.candroid.pazaramafinalproject.util.downloadUrl
 import com.candroid.pazaramafinalproject.util.placeHolderProgressBar
 
 class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonHolder>() {
 
-    inner class PokemonHolder(val binding: PokemonItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class PokemonHolder(val binding: PokemonItemBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     private var pokedexList: List<PokedexListEntry> = listOf()
 
@@ -29,6 +33,10 @@ class PokemonAdapter : RecyclerView.Adapter<PokemonAdapter.PokemonHolder>() {
             pokedex.imageUrl,
             placeHolderProgressBar(holder.binding.root.context)
         )
+        holder.binding.pokemonCard.setOnClickListener {
+            Navigation.findNavController(it)
+                .navigate(HomeFragmentDirections.actionHomeFragmentToDetailFragment(pokedex.number))
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
