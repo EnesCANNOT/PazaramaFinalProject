@@ -46,6 +46,7 @@ dependencies {
 
     val hiltVersion = "2.48"
     val retrofitVersion = "2.9.0"
+    val lottieVersion = "3.4.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -67,4 +68,7 @@ dependencies {
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+
+
+    implementation ("com.airbnb.android:lottie:$lottieVersion")
 }
