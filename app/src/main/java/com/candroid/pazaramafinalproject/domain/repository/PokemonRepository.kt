@@ -1,4 +1,4 @@
-package com.candroid.pazaramafinalproject.data.repository
+package com.candroid.pazaramafinalproject.domain.repository
 
 import android.util.Log
 import com.candroid.pazaramafinalproject.data.remote.responses.Pokemon

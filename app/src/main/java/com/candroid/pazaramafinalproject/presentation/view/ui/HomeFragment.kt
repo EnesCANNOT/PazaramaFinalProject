@@ -137,16 +137,14 @@ class HomeFragment : Fragment() {
         viewModel.pokemonList.observe(viewLifecycleOwner) {
             pokemonAdapter.updatePokedexList(it)
         }
-
-        /*
         viewModel.isLoading.observe(viewLifecycleOwner) {
             it?.let {
                 if (it){
                     binding.homeScreenProgressBar.visibility = View.VISIBLE
-                    binding.homeScreenFragmentRV.visibility = View.GONE
-                    binding.homeScreenError.visibility = View.GONE
+                    binding.pokemonRecyclerView.visibility = View.GONE
+                    binding.homeScreenErrorTV.visibility = View.GONE
                 } else {
-                    binding.homeScreenFragmentRV.visibility = View.VISIBLE
+                    binding.pokemonRecyclerView.visibility = View.VISIBLE
                     binding.homeScreenProgressBar.visibility = View.GONE
                 }
             }
@@ -154,11 +152,12 @@ class HomeFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner) {
             it?.let {
-                binding.homeScreenError.visibility = View.VISIBLE
-                binding.homeScreenError.text = it
+                Log.i("HebeleHome", "$it")
+                binding.homeScreenErrorTV.visibility = View.VISIBLE
+                binding.homeScreenErrorTV.text = it
+                binding.pokemonRecyclerView.visibility = View.GONE
             }
         }
-    */
     }
 
     override fun onResume() {

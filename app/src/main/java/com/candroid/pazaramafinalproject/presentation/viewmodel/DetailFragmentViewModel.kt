@@ -19,7 +19,7 @@ import com.candroid.pazaramafinalproject.R
 import com.candroid.pazaramafinalproject.data.remote.responses.Pokemon
 import com.candroid.pazaramafinalproject.data.remote.responses.PokemonSpecies
 import com.candroid.pazaramafinalproject.data.remote.responses.Type
-import com.candroid.pazaramafinalproject.data.repository.PokemonRepository
+import com.candroid.pazaramafinalproject.domain.repository.PokemonRepository
 import com.candroid.pazaramafinalproject.databinding.FragmentDetailBinding
 import com.candroid.pazaramafinalproject.util.Resource
 import com.candroid.pazaramafinalproject.util.UtilsActivity

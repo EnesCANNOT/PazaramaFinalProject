@@ -1,4 +1,4 @@
-package com.candroid.pazaramafinalproject.data.models
+package com.candroid.pazaramafinalproject.domain.models
 
 data class PokedexListEntry(
     val pokemonName: String,

@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.candroid.pazaramafinalproject.data.models.PokedexListEntry
+import com.candroid.pazaramafinalproject.domain.models.PokedexListEntry
 import com.candroid.pazaramafinalproject.data.remote.responses.Pokemon
-import com.candroid.pazaramafinalproject.data.repository.PokemonRepository
+import com.candroid.pazaramafinalproject.domain.repository.PokemonRepository
 import com.candroid.pazaramafinalproject.util.Constants.PAGE_SIZE
 import com.candroid.pazaramafinalproject.util.Resource
 import com.candroid.pazaramafinalproject.util.SortOption
@@ -31,7 +31,7 @@ class HomeFragmentViewModel @Inject constructor(val pokemonRepository: PokemonRe
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _error = MutableLiveData<String>("")
+    private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
     private val _searchQuery = MutableLiveData<String>("")

@@ -5,7 +5,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.candroid.pazaramafinalproject.R
-import com.candroid.pazaramafinalproject.data.models.PokedexListEntry
+import com.candroid.pazaramafinalproject.domain.models.PokedexListEntry
 import com.candroid.pazaramafinalproject.databinding.PokemonItemBinding
 import com.candroid.pazaramafinalproject.presentation.view.ui.HomeFragmentDirections
 import com.candroid.pazaramafinalproject.util.downloadUrl

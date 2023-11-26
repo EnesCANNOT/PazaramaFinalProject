@@ -1,7 +1,7 @@
 package com.candroid.pazaramafinalproject.data.di
 
 import com.candroid.pazaramafinalproject.data.remote.service.PokemonApi
-import com.candroid.pazaramafinalproject.data.repository.PokemonRepository
+import com.candroid.pazaramafinalproject.domain.repository.PokemonRepository
 import com.candroid.pazaramafinalproject.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
