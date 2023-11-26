@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.candroid.pazaramafinalproject.databinding.FragmentDetailBinding
 import com.candroid.pazaramafinalproject.presentation.viewmodel.DetailFragmentViewModel
-import com.candroid.pazaramafinalproject.presentation.viewmodel.HomeFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 

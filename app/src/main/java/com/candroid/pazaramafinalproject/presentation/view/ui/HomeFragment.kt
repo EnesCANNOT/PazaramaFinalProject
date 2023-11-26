@@ -55,7 +55,7 @@ class HomeFragment : Fragment() {
                     pokemonAdapter.updatePokedexList(viewModel.pokemonList.value!!)
                 } else{
                     viewModel.getPokemon(query)
-                    viewModel.filteredList.value?.let { pokemonAdapter.updatePokedexList(it) }
+                    //viewModel.filteredList.value?.let { pokemonAdapter.updatePokedexList(it) }
                 }
                 return true
             }
@@ -65,22 +65,25 @@ class HomeFragment : Fragment() {
                     binding.searchView.queryHint = "Eg: Pikachu or #00025"
                     viewModel.apply { setFilteredList().also { setSearchQueryText("") } }
                     viewModel.fetchPokemonList()
-                    pokemonAdapter.updatePokedexList(viewModel.pokemonList.value!!)
+                    //pokemonAdapter.updatePokedexList(viewModel.pokemonList.value!!)
                     return true
                 } else {
                     binding.searchView.queryHint = null
                     viewModel.getPokemon(newText)
-                    if(viewModel.filteredList.value != null){
-                        pokemonAdapter.updatePokedexList(viewModel.filteredList.value!!)
-                    }  else{
-                        pokemonAdapter.updatePokedexList(viewModel.pokemonList.value!!)
-                    }
-                    //viewModel.filteredList.value?.let { pokemonAdapter.updatePokedexList(it) }
+//                    if(viewModel.filteredList.value != null){
+//                        pokemonAdapter.updatePokedexList(viewModel.filteredList.value!!)
+//                    }  else{
+//                        pokemonAdapter.updatePokedexList(viewModel.pokemonList.value!!)
+//                    }
+//                    viewModel.filteredList.value?.let { pokemonAdapter.updatePokedexList(it) }
                     return true
                 }
             }
         })
 
+        viewModel.filteredList.observe(viewLifecycleOwner, Observer { filteredList ->
+            filteredList?.let { pokemonAdapter.updatePokedexList(it) }
+        })
 
         binding.sortButton.setOnClickListener {
             showCustomPopup(requireContext(), it, viewModel)
@@ -116,15 +119,15 @@ class HomeFragment : Fragment() {
                             pokemonAdapter.updatePokedexList(it)
                         }
                     }
-                    else {
-                        viewModel.searchQuery.value?.let { searchQuery ->
-                            viewModel.getPokemon(searchQuery)
-                            viewModel.filteredList.value?.let {
-                                pokemonAdapter.updatePokedexList(it)
-                                Log.i("Hebele", "search query changed")
-                            }
-                        }
-                    }
+//                    else {
+//                        viewModel.searchQuery.value?.let { searchQuery ->
+//                            viewModel.getPokemon(searchQuery)
+//                            viewModel.filteredList.value?.let {
+//                                pokemonAdapter.updatePokedexList(it)
+//                                Log.i("Hebele", "search query changed")
+//                            }
+//                        }
+//                    }
                 }
             }
         })

@@ -69,7 +69,7 @@ enum class SortOptionDrawable(val optionDrawable: Int) {
 fun ImageView.downloadUrl(url: String?, progressDrawable: CircularProgressDrawable){
     val options = RequestOptions()
         .placeholder(progressDrawable)
-        .error(R.drawable.ic_error_outline)
+        .error(R.drawable.silhouette)
 
     Glide.with(context)
         .setDefaultRequestOptions(options)

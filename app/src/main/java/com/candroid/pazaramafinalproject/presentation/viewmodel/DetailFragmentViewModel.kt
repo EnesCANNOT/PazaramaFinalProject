@@ -98,8 +98,10 @@ class DetailFragmentViewModel @Inject constructor(val pokemonRepository: Pokemon
         binding.weightAmountTV.text = "${pokemon.weight / 10.0} kg".replace(".", ",")
         binding.heightAmountTV.text = "${pokemon.height / 10.0} m".replace(".", ",")
         binding.selectedPokemonNumberTV.text = String.format("#%05d", pokemon.id)
-        binding.firstAbilityTV.text = "${pokemon.moves[0].move.name}"
-        binding.secondAbilityTV.text = "${pokemon.moves[1].move.name}"
+        if (!pokemon.moves.isNullOrEmpty()){
+            binding.firstAbilityTV.text = pokemon.moves.get(0).move.name
+            binding.secondAbilityTV.text = pokemon.moves.get(1).move.name
+        }
         setChipsVisibility(binding, pokemon.types)
         _selectedPokemonSpecies.value?.let {
             binding.pokemonDescriptionTV.text =
