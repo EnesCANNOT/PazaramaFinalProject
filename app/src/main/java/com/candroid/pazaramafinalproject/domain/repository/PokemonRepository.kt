@@ -1,11 +1,9 @@
 package com.candroid.pazaramafinalproject.domain.repository
 
-import android.util.Log
 import com.candroid.pazaramafinalproject.data.remote.responses.Pokemon
 import com.candroid.pazaramafinalproject.data.remote.responses.PokemonList
 import com.candroid.pazaramafinalproject.data.remote.responses.PokemonSpecies
 import com.candroid.pazaramafinalproject.data.remote.service.PokemonApi
-import com.candroid.pazaramafinalproject.data.remote.service.RetrofitInstance
 import com.candroid.pazaramafinalproject.util.Resource
 import javax.inject.Inject
 

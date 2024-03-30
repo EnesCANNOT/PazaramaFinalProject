@@ -2,8 +2,6 @@ package com.candroid.pazaramafinalproject.presentation.view.ui
 
 import PokemonAdapter
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,21 +9,18 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.candroid.pazaramafinalproject.R
-import com.candroid.pazaramafinalproject.presentation.viewmodel.HomeFragmentViewModel
 import com.candroid.pazaramafinalproject.databinding.FragmentHomeBinding
 import com.candroid.pazaramafinalproject.databinding.PopupMenuBinding
+import com.candroid.pazaramafinalproject.presentation.viewmodel.HomeFragmentViewModel
 import com.candroid.pazaramafinalproject.util.UtilsActivity
 import com.candroid.pazaramafinalproject.util.showCustomPopup
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -124,7 +119,6 @@ class HomeFragment : Fragment() {
 //                            viewModel.getPokemon(searchQuery)
 //                            viewModel.filteredList.value?.let {
 //                                pokemonAdapter.updatePokedexList(it)
-//                                Log.i("Hebele", "search query changed")
 //                            }
 //                        }
 //                    }
@@ -152,7 +146,6 @@ class HomeFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner) {
             it?.let {
-                Log.i("HebeleHome", "$it")
                 binding.homeScreenErrorTV.visibility = View.VISIBLE
                 binding.homeScreenErrorTV.text = it
                 binding.pokemonRecyclerView.visibility = View.GONE

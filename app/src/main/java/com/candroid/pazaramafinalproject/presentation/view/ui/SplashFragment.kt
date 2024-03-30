@@ -2,11 +2,10 @@ package com.candroid.pazaramafinalproject.presentation.view.ui
 
 import android.animation.Animator
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.candroid.pazaramafinalproject.R
 import com.candroid.pazaramafinalproject.databinding.FragmentSplashBinding
@@ -37,7 +36,6 @@ class SplashFragment : Fragment() {
 
             override fun onAnimationRepeat(p0: Animator) {
                 counter++
-                Log.i("HebeleSplash", "Counter : ${counter}")
                 if (counter == 2){
                     binding.animationView.pauseAnimation()
                     Navigation.findNavController(requireView()).navigate(R.id.action_splashFragment_to_homeFragment)

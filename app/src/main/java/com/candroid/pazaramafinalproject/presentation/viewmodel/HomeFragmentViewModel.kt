@@ -1,19 +1,16 @@
 package com.candroid.pazaramafinalproject.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.candroid.pazaramafinalproject.domain.models.PokedexListEntry
-import com.candroid.pazaramafinalproject.data.remote.responses.Pokemon
 import com.candroid.pazaramafinalproject.domain.repository.PokemonRepository
 import com.candroid.pazaramafinalproject.util.Constants.PAGE_SIZE
 import com.candroid.pazaramafinalproject.util.Resource
 import com.candroid.pazaramafinalproject.util.SortOption
 import com.candroid.pazaramafinalproject.util.SortOptionDrawable
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.util.Locale
 import javax.inject.Inject
@@ -81,10 +78,8 @@ class HomeFragmentViewModel @Inject constructor(val pokemonRepository: PokemonRe
         if (query != null) {
 
             if (query.startsWith("#")){
-                Log.i("HebeleQuery", query.toString())
                 val subquery = query.substring(1).toIntOrNull()
                 getPokemonById(subquery)
-                Log.i("HebeleQuery", subquery.toString())
 
             } else{
                 getPokemonByName(query)
@@ -118,31 +113,25 @@ class HomeFragmentViewModel @Inject constructor(val pokemonRepository: PokemonRe
     }
 
     private fun getPokemonById(id: Int?){
-        Log.i("HebeleQuery", "id: Int? : ${id}")
         id?.let {
             _searchQuery.value = id.toString()
-            Log.i("HebeleQuery", "_searchQuery.value : ${_searchQuery.value}")
             viewModelScope.launch {
                 val result = pokemonRepository.getPokemonById(id)
                 when(result) {
                     is Resource.Success -> {
-                        Log.i("HebeleQuery", "Success")
                         val pokemon = result.data
                         pokemon?.let {
                             val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${it.id}.png"
                             _filteredList.value = listOf(PokedexListEntry(it.name, imageUrl, it.id))
                         }
-                        Log.i("HebeleQuery", "Success")
                     }
 
                     is Resource.Error -> {
-                        Log.i("HebeleQuery", "Error")
                         _error.value = result.message.toString()
                         _isLoading.value = false
                     }
 
                     is Resource.Loading -> {
-                        Log.i("HebeleQuery", "Loading")
                         _isLoading.value = true
                     }
                 }

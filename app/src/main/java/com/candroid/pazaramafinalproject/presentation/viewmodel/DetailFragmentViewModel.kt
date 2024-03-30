@@ -1,26 +1,20 @@
 package com.candroid.pazaramafinalproject.presentation.viewmodel
 
-import android.app.Activity
 import android.content.res.ColorStateList
-import android.os.Build
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide
 import com.candroid.pazaramafinalproject.R
 import com.candroid.pazaramafinalproject.data.remote.responses.Pokemon
 import com.candroid.pazaramafinalproject.data.remote.responses.PokemonSpecies
 import com.candroid.pazaramafinalproject.data.remote.responses.Type
-import com.candroid.pazaramafinalproject.domain.repository.PokemonRepository
 import com.candroid.pazaramafinalproject.databinding.FragmentDetailBinding
+import com.candroid.pazaramafinalproject.domain.repository.PokemonRepository
 import com.candroid.pazaramafinalproject.util.Resource
 import com.candroid.pazaramafinalproject.util.UtilsActivity
 import com.candroid.pazaramafinalproject.util.downloadUrl
@@ -54,7 +48,6 @@ class DetailFragmentViewModel @Inject constructor(val pokemonRepository: Pokemon
     private fun getSelectedPokemon() {
         viewModelScope.launch {
             if (_selectedId.value == null) {
-                Log.i("HebelePokemon", "selectedId.value is null")
             } else {
                 var result: Resource<Pokemon>
                 runBlocking {
@@ -72,7 +65,7 @@ class DetailFragmentViewModel @Inject constructor(val pokemonRepository: Pokemon
                     }
 
                     is Resource.Loading -> {
-                        Log.i("HebelePokemon", "Loading")
+
                     }
                 }
             }
